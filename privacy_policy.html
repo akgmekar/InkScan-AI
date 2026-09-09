@@ -1,581 +1,180 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InkText AI – Handwriting to Text</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --surface: #fef7ff;
-        --surface-dim: #dfd7e4;
-        --surface-bright: #fef7ff;
-        --surface-container-lowest: #ffffff;
-        --surface-container-low: #f8f1fe;
-        --surface-container: #f3ebf8;
-        --surface-container-high: #ede5f2;
-        --surface-container-highest: #e7e0ec;
-        --on-surface: #1d1a23;
-        --on-surface-variant: #5a4044;
-        --inverse-surface: #322f38;
-        --inverse-on-surface: #f6eefb;
-        --outline: #8e6f74;
-        --outline-variant: #e3bdc3;
-        --surface-tint: #bc004f;
-        --primary: #b0004a;
-        --on-primary: #ffffff;
-        --primary-container: #d81b60;
-        --on-primary-container: #fff2f3;
-        --inverse-primary: #ffb2bf;
-        --secondary: #6b5a60;
-        --on-secondary: #ffffff;
-        --secondary-container: #f4dce4;
-        --on-secondary-container: #716066;
-        --tertiary: #59575c;
-        --on-tertiary: #ffffff;
-        --tertiary-container: #726f74;
-        --on-tertiary-container: #f8f4f9;
-        --error: #ba1a1a;
-        --on-error: #ffffff;
-        --error-container: #ffdad6;
-        --on-error-container: #93000a;
-        --primary-fixed: #ffd9de;
-        --primary-fixed-dim: #ffb2bf;
-        --on-primary-fixed: #3f0016;
-        --on-primary-fixed-variant: #90003b;
-        --secondary-fixed: #f4dce4;
-        --secondary-fixed-dim: #d7c1c8;
-        --on-secondary-fixed: #25181e;
-        --on-secondary-fixed-variant: #524249;
-        --tertiary-fixed: #e5e1e7;
-        --tertiary-fixed-dim: #c9c5cb;
-        --on-tertiary-fixed: #1c1b1f;
-        --on-tertiary-fixed-variant: #48464a;
-        --background: #fef7ff;
-        --on-background: #1d1a23;
-        --surface-variant: #e7e0ec;
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#D81B60">
+<title>InkText AI – Legal</title>
+<style>
+:root{
+  --primary:#D81B60;--text:#1C1B1F;--bg:#FEF7FF;--pastel:#FCE4EC;
+  --card:#fff;--muted:#625B66;--border:#eadde5;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.65}
+button,a{font:inherit}
+.app{max-width:760px;margin:auto;min-height:100vh;background:var(--bg)}
+header{position:sticky;top:0;z-index:5;height:68px;display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(254,247,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.iconbtn{width:48px;height:48px;border:0;border-radius:50%;background:transparent;color:var(--text);cursor:pointer;display:grid;place-items:center;font-size:25px}
+.iconbtn:hover{background:var(--pastel)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:800;box-shadow:0 5px 14px #d81b6033}
+.header-title{font-size:20px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{padding:28px 16px 48px}
+.hero{background:linear-gradient(135deg,#fff,#FCE4EC);border:1px solid var(--border);border-radius:24px;padding:26px 22px;margin-bottom:22px;box-shadow:0 8px 24px #35132a0d}
+h1{font-size:32px;line-height:1.2;margin:0 0 8px}
+.updated{font-size:13px;color:var(--muted)}
+section{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;margin:14px 0;box-shadow:0 5px 18px #35132a0a}
+h2{font-size:22px;line-height:1.3;margin:0 0 10px;color:var(--text)}
+h3{font-size:17px;margin:18px 0 6px}
+p{font-size:15.5px;margin:8px 0;color:#37323a}
+ul{margin:8px 0;padding-left:22px;color:#37323a}
+li{margin:5px 0}
+.plan{background:var(--pastel);border-radius:16px;padding:16px;margin:12px 0;border:1px solid #f4cbd9}
+.plan strong{display:block;color:var(--primary);font-size:18px}
+.plan .price{font-size:24px;font-weight:800;color:var(--text)}
+.badge{display:inline-block;background:var(--primary);color:#fff;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+.legal-link{color:var(--primary);font-weight:700;text-decoration:none;border-bottom:1px solid currentColor}
+.legal-link:hover{text-decoration:underline}
+.note{border-left:4px solid var(--primary);background:#fff5f8;padding:12px 14px;border-radius:10px;margin:12px 0}
+footer{text-align:center;color:var(--muted);font-size:13px;padding:10px 16px 40px}
+.hidden{display:none!important}
+.bottom-nav{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px;box-shadow:0 12px 32px #35132a20;z-index:10}
+.navbtn{border:0;background:transparent;padding:10px 16px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:700}
+.navbtn.active{background:var(--pastel);color:var(--primary)}
+@media(max-width:520px){
+ main{padding:20px 12px 100px}.hero{padding:22px 18px}h1{font-size:29px}section{padding:17px;border-radius:18px}
+ .bottom-nav{width:calc(100% - 24px);justify-content:center}.navbtn{flex:1;padding:10px 8px;font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <button class="iconbtn" aria-label="Go back" onclick="goBack()">‹</button>
+  <div class="brand"><div class="logo" aria-label="InkText AI logo">IT</div><div class="header-title" id="headerTitle">Privacy Policy</div></div>
+</header>
 
-        --headline-lg: 32px;
-        --headline-md: 28px;
-        --headline-sm: 24px;
-        --body-lg: 16px;
-        --body-md: 14px;
-        --body-sm: 12px;
-        --label-lg: 14px;
-        --label-md: 12px;
-        --label-sm: 11px;
+<main id="privacy">
+  <div class="hero">
+    <h1>Privacy Policy</h1>
+    <div class="updated"></div>
+  </div>
 
-        --space-xxs: 4px;
-        --space-xs: 8px;
-        --space-sm: 12px;
-        --space-md: 16px;
-        --space-lg: 24px;
-        --space-xl: 32px;
-        --space-2xl: 48px;
-        --gutter: 16px;
-        --margin-screen: 16px;
+  <section><h2>1. Introduction</h2><p>InkText AI is an OCR application that helps users convert handwritten images and documents into editable digital text.</p></section>
 
-        --radius-sm: 0.25rem;
-        --radius-md: 0.5rem;
-        --radius-lg: 1rem;
-        --radius-xl: 1.5rem;
-        --radius-full: 9999px;
-      }
+  <section><h2>2. Information We Collect</h2>
+    <p>Only information actually processed by the implemented application should be described here. Depending on the current implementation, this may include:</p>
+    <ul><li>Images selected or captured for OCR</li><li>Scanned documents</li><li>OCR-generated text</li><li>App settings</li><li>Token balance and token transaction history</li><li>Premium status</li><li>Premium Plus lifetime entitlement</li><li>Basic technical information required for app operation</li></ul>
+    <div class="note"><strong>Implementation note:</strong> Remove any category above that is not actually processed or collected by the deployed application.</div>
+  </section>
 
-      * { box-sizing: border-box; }
+  <section><h2>3. Camera &amp; Photos</h2><p>Camera permission is required when the application scans handwritten documents using the camera. Photo/media access is required when users select images for OCR. Permissions are requested only when required, and the application does not access camera or photos unnecessarily.</p></section>
 
-      html {
-        scroll-behavior: smooth;
-      }
+  <section><h2>4. OCR Processing</h2>
+    <p>OCR processing must be described according to the actual implementation. If OCR is performed on-device, state that processing occurs on the user's device. If an external or cloud OCR service is used, identify that service and explain what data is transmitted and how it is processed.</p>
+    <div class="note">Do not represent OCR as 100% on-device unless the implementation actually performs OCR entirely on-device.</div>
+  </section>
 
-      body {
-        margin: 0;
-        font-family: "Roboto Flex", sans-serif;
-        background: var(--background);
-        color: var(--on-background);
-        line-height: 1.5;
-      }
+  <section><h2>5. Storage</h2><p>Storage practices must match the actual implementation. Where scans are stored locally, scans remain on the user's device and users can delete individual scans or clear scan history where those controls are available. Removing app data or uninstalling the app may remove locally stored data.</p><p>If cloud storage exists, the deployed application's actual cloud storage and data handling must be described instead.</p></section>
 
-      main {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 32px var(--margin-screen) 64px;
-      }
+  <section><h2>6. Token &amp; Premium Information</h2>
+    <p>The application may maintain token balance, token transaction history, Premium status, Premium expiry information where applicable, and a Premium Plus lifetime entitlement. This information is used to provide purchased or activated features and maintain access status.</p>
+    <div class="plan"><strong>Premium</strong><span class="price">500 Tokens</span><br>30 Days</div>
+    <div class="plan"><strong>Premium Plus</strong><span class="price">2,000 Tokens</span><br>Lifetime</div>
+    <p><strong>Normal OCR scans do not consume tokens.</strong> Tokens are consumed only when activating an access plan.</p>
+  </section>
 
-      .page-shell {
-        background: var(--surface);
-        border-radius: 24px;
-        box-shadow: 0 14px 40px rgba(176, 0, 74, 0.08);
-        overflow: hidden;
-      }
+  <section><h2>7. Advertising</h2>
+    <p>If Google AdMob is integrated, eligible non-Premium users may see advertisements. A qualifying completed rewarded-ad experience may provide <strong>+10 Tokens</strong>. Watching an advertisement does not deduct tokens. Advertising providers may process information according to their own privacy policies.</p>
+    <p><a class="legal-link" href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Advertising Privacy Information</a></p>
+    <div class="note">If AdMob is not actually integrated, remove this section and its link.</div>
+  </section>
 
-      .hero {
-        background: linear-gradient(135deg, rgba(216, 27, 96, 0.08), rgba(244, 220, 228, 0.7));
-        border-bottom: 1px solid rgba(142, 111, 116, 0.2);
-        padding: 32px 24px 24px;
-      }
+  <section><h2>8. Google Play Billing</h2><p>If Google Play Billing is integrated, applicable purchases are processed through Google Play Billing. InkText AI should not directly collect or store credit/debit card numbers, CVV, UPI PINs, or bank passwords. Payment processing is handled through Google Play.</p><div class="note">Do not create or imply a fake payment/card form.</div></section>
 
-      h1, h2, h3, h4, p, ul, li {
-        margin-top: 0;
-      }
+  <section><h2>9. Data Security</h2><p>We use reasonable technical and organizational measures designed to protect information processed by the application. However, no electronic system can be guaranteed to be completely secure.</p></section>
 
-      h1 {
-        font-size: var(--headline-lg);
-        font-weight: 600;
-        line-height: 40px;
-        color: var(--on-surface);
-      }
+  <section><h2>10. Data Retention</h2><p>Retention must follow the actual implementation. Where supported, users can delete individual scans and clear scan history. Removing app data or uninstalling the application may remove locally stored data. Do not claim deletion from a server where no server exists.</p></section>
 
-      h2 {
-        font-size: var(--headline-md);
-        font-weight: 600;
-        line-height: 36px;
-        color: var(--on-surface);
-      }
+  <section><h2>11. Children's Privacy</h2><p>InkText AI is intended for general productivity and document/OCR use. Any age restrictions and children's-data practices should reflect the actual configuration and applicable requirements. Do not make unsupported claims about children's data.</p></section>
 
-      h3 {
-        font-size: var(--headline-sm);
-        font-weight: 500;
-        line-height: 32px;
-        color: var(--on-surface);
-      }
+  <section><h2>12. Third-Party Services</h2><p>Only third-party services actually integrated into the deployed application should be listed. Examples may include Google ML Kit, Google AdMob, Google Play Billing, or Firebase, but unused services must not be listed.</p></section>
 
-      p, li {
-        font-size: var(--body-md);
-        line-height: 20px;
-        color: var(--on-surface-variant);
-      }
+  <section><h2>13. User Rights &amp; Controls</h2><ul><li>Manage permissions through device settings.</li><li>Edit OCR text where editing is available.</li><li>Delete individual scans where supported.</li><li>Clear scan history where supported.</li><li>Manage account information if accounts exist.</li><li>Manage purchased access through the supported purchase/access system.</li></ul></section>
 
-      .section {
-        padding: 28px 24px;
-        border-bottom: 1px solid rgba(142, 111, 116, 0.15);
-      }
+  <section><h2>14. Changes to Privacy Policy</h2><p><strong></strong></p><p>This Privacy Policy may be updated from time to time to reflect changes to the application, services, legal requirements, or data practices.</p></section>
 
-      .section:last-child {
-        border-bottom: none;
-      }
+  <section><h2>15. Contact Us</h2><p><strong>Email:</strong> [akgmekar@gmail.com]</p><p><strong>Company:</strong> [AKG Mekar]</p></section>
+  <footer>InkText AI – Handwriting to Text</footer>
+</main>
 
-      .section-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
-      }
+<main id="terms" class="hidden">
+  <div class="hero">
+    <h1>Terms &amp; Conditions</h1>
+  </div>
 
-      .section-label {
-        background: rgba(216, 27, 96, 0.1);
-        color: var(--primary-container);
-        border-radius: 12px;
-        padding: 6px 10px;
-        font-size: var(--label-md);
-        font-weight: 600;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
+  <section><h2>1. Acceptance of Terms</h2><p>By accessing or using InkText AI, users agree to these Terms &amp; Conditions. If you do not agree, do not use the application.</p></section>
+  <section><h2>2. Description of Service</h2><p>InkText AI may provide handwriting OCR, image scanning, text editing, translation where available, PDF export, batch scanning, token-based access, and Premium features. Only features actually implemented in the application should be represented as available.</p></section>
+  <section><h2>3. Free Scans</h2><div class="plan"><strong>5 Free Scans</strong><span>New users may receive 5 free scans/uses according to the application's configured account/device eligibility rules.</span></div><p>Free scans are separate from the token balance. Free scans are <strong>not tokens</strong>.</p></section>
+  <section><h2>4. Tokens</h2><p><strong>Tokens are an in-app digital usage currency.</strong></p><p>Normal OCR usage does not consume tokens. Tokens are consumed only when purchasing or activating an available access plan.</p><div class="note">Do not record “-10 Tokens — OCR Scan” or any token transaction that did not actually occur.</div></section>
 
-      .brand-note {
-        background: var(--surface-container-low);
-        border-radius: var(--radius-xl);
-        padding: 16px;
-        margin-top: 16px;
-      }
+  <section><h2>5. Premium Plan</h2>
+    <div class="plan"><strong>Premium</strong><span class="price">500 Tokens</span><br>30 Days</div>
+    <p>During active Premium access, included features may include unlimited OCR, batch scanning, PDF export, translation, and other included Premium features. Tokens are deducted only after successful Premium activation.</p>
+  </section>
 
-      .colors-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 16px;
-        margin-top: 16px;
-      }
+  <section><h2>6. Premium Plus</h2>
+    <div class="plan"><strong>Premium Plus</strong><span class="price">2,000 Tokens</span><br><span class="badge">LIFETIME</span></div>
+    <p>Premium Plus provides lifetime access to the included Premium features after successful activation. It is not monthly, yearly, 30-day, or automatically expiring.</p>
+  </section>
 
-      .color-card {
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        background: var(--surface-container-lowest);
-        border: 1px solid rgba(142, 111, 116, 0.15);
-      }
+  <section><h2>7. Token / Plan Activation</h2>
+    <p><strong>Premium:</strong> 500 Tokens are deducted after successful Premium activation.</p>
+    <p><strong>Premium Plus:</strong> 2,000 Tokens are deducted after successful Premium Plus activation.</p>
+    <ul><li>Do not deduct tokens before successful activation.</li><li>Do not deduct tokens for normal OCR.</li><li>Do not deduct tokens for batch scanning.</li><li>Do not deduct tokens for PDF export.</li><li>Do not deduct tokens for translation.</li><li>Do not deduct tokens for watching advertisements.</li><li>Do not deduct tokens from free scans.</li><li>Never allow a negative token balance.</li><li>The same successful activation must never deduct tokens twice.</li></ul>
+  </section>
 
-      .swatch {
-        height: 72px;
-      }
+  <section><h2>8. Rewarded Ads</h2><p>Eligible users may receive <strong>+10 Tokens</strong> after successfully completing a qualifying rewarded advertisement. Watching the ad does not consume tokens. No promise of unlimited rewarded ads is made unless the actual application supports unlimited rewards.</p></section>
+  <section><h2>9. Payments</h2><p>If Google Play Billing is used, applicable purchases are processed through Google Play. InkText AI does not directly collect payment-card information.</p></section>
+  <section><h2>10. Refunds</h2><p>Refunds are handled according to applicable Google Play purchase, refund, and payment policies. No specific refund is guaranteed.</p></section>
+  <section><h2>11. OCR Accuracy</h2><p>OCR results may contain errors. Accuracy can be affected by handwriting style and quality, lighting, image resolution and quality, language, document condition, and background noise or visual interference.</p><div class="note"><strong>Review OCR results before relying on them.</strong></div></section>
+  <section><h2>12. User Content</h2><p>Users are responsible for content they scan, upload, process, edit, store, export, or share. Users must have appropriate rights and authorization to process that content.</p></section>
+  <section><h2>13. Prohibited Use</h2><ul><li>Illegal activities</li><li>Fraud or abuse</li><li>Malicious activity</li><li>Unauthorized access</li><li>Circumventing security</li><li>Manipulating tokens</li><li>Manipulating Premium or Premium Plus status</li><li>Exploiting billing or reward systems</li></ul></section>
+  <section><h2>14. Intellectual Property</h2><p>InkText AI branding, application software, UI/design, logos, original application content, and protected materials are owned or licensed by their respective rights holders. Users retain rights to their own content, subject to applicable law and actual service behavior.</p></section>
+  <section><h2>15. Account Termination</h2><p>Access may be suspended or terminated for fraud, abuse, security attacks, token manipulation, billing abuse, or serious violations of these Terms. Legitimately purchased access will not be removed except where legally permitted or required.</p></section>
+  <section><h2>16. Service Availability</h2><p>The application may occasionally experience maintenance, technical problems, bugs, device compatibility problems, third-party service outages, or temporary interruptions. Uninterrupted availability is not guaranteed.</p></section>
+  <section><h2>17. Disclaimer</h2><p>InkText AI is provided for productivity and convenience purposes. OCR results should always be reviewed for accuracy.</p></section>
+  <section><h2>18. Limitation of Liability</h2><p>To the extent permitted by applicable law, InkText AI and its operators will not be responsible for indirect, incidental, or consequential losses arising from use of the application.</p></section>
+  <section><h2>19. Changes to Terms</h2><p><strong></strong></p><p>These Terms &amp; Conditions may be updated from time to time. Continued use of the application after changes become effective may constitute acceptance of the updated Terms.</p></section>
+  <section><h2>20. Contact Us</h2><p><strong>Email:</strong> [akgmekar@gmail.com]</p><p><strong>Company:</strong> [AKG Mekar]</p></section>
+  <footer>InkText AI – Handwriting to Text</footer>
+</main>
 
-      .color-info {
-        padding: 12px;
-      }
-
-      .color-name {
-        display: block;
-        font-size: var(--label-lg);
-        font-weight: 600;
-        color: var(--on-surface);
-      }
-
-      .color-hex {
-        display: block;
-        margin-top: 4px;
-        font-size: var(--body-sm);
-        color: var(--on-surface-variant);
-      }
-
-      .typography-list {
-        display: grid;
-        gap: 10px;
-        margin-top: 16px;
-      }
-
-      .type-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        background: var(--surface-container-low);
-        border-radius: var(--radius-lg);
-        padding: 12px 14px;
-      }
-
-      .type-row strong {
-        color: var(--on-surface);
-      }
-
-      .details {
-        display: grid;
-        gap: 10px;
-      }
-
-      .pill-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .pill {
-        background: var(--surface-container);
-        color: var(--on-surface);
-        padding: 7px 10px;
-        border-radius: 10px;
-        font-size: var(--label-md);
-        font-weight: 500;
-      }
-
-      ul {
-        margin-left: 18px;
-        padding-left: 10px;
-      }
-
-      li + li {
-        margin-top: 8px;
-      }
-
-      .component-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-        gap: 16px;
-        margin-top: 16px;
-      }
-
-      .component-card {
-        background: var(--surface-container-low);
-        border-radius: var(--radius-xl);
-        padding: 16px;
-        border: 1px solid rgba(142, 111, 116, 0.14);
-      }
-
-      .button-demo {
-        margin-top: 12px;
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .btn {
-        border-radius: 999px;
-        padding: 10px 16px;
-        border: none;
-        font-weight: 600;
-        font-size: var(--label-lg);
-      }
-
-      .btn.primary {
-        background: var(--primary-container);
-        color: var(--on-primary-container);
-      }
-
-      .btn.secondary {
-        background: var(--secondary-container);
-        color: var(--on-secondary-container);
-      }
-
-      .chip-demo {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 12px;
-      }
-
-      .chip {
-        background: var(--surface-container);
-        color: var(--on-surface);
-        padding: 6px 10px;
-        border-radius: 999px;
-        font-size: var(--label-md);
-      }
-
-      .example-box {
-        margin-top: 12px;
-        background: var(--surface-container-lowest);
-        border-radius: var(--radius-xl);
-        padding: 14px;
-        border: 1px solid rgba(142, 111, 116, 0.15);
-      }
-
-      .example-box .meta {
-        font-size: var(--body-sm);
-        color: var(--on-surface-variant);
-      }
-
-      @media (max-width: 640px) {
-        main {
-          padding-left: 12px;
-          padding-right: 12px;
-        }
-
-        .hero,
-        .section {
-          padding-left: 16px;
-          padding-right: 16px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <div class="page-shell">
-        <header class="hero">
-          <h1>Brand &amp; Style</h1>
-          <p>
-            This design system is built upon a <strong>Corporate / Modern (Material 3)</strong>
-            aesthetic, tailored specifically for an Android productivity scanner application.
-            The emotional response is efficient, approachable, and delightful—transforming the
-            mechanical chore of digitization into a warm, tactile experience.
-          </p>
-        </header>
-
-        <section class="section">
-          <div class="section-header">
-            <span class="section-label">Brand Personality</span>
-          </div>
-          <ul>
-            <li><strong>Precise:</strong> Laser-focused on accurate OCR and clean document management.</li>
-            <li><strong>Approachable:</strong> Welcoming pink hues soften the utilitarian nature of document scanning.</li>
-            <li><strong>Polished:</strong> High-end mobile ergonomics with fluid transitions and satisfying micro-interactions.</li>
-          </ul>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <span class="section-label">Colors</span>
-          </div>
-          <p>
-            The color palette leverages vibrant pinks against pristine whites and tinted surfaces to
-            create a high-contrast, accessible environment ideal for reading transcribed text.
-          </p>
-          <div class="colors-grid">
-            <div class="color-card">
-              <div class="swatch" style="background:#b0004a"></div>
-              <div class="color-info">
-                <span class="color-name">Primary</span>
-                <span class="color-hex">#B0004A</span>
-              </div>
-            </div>
-            <div class="color-card">
-              <div class="swatch" style="background:#f4dce4"></div>
-              <div class="color-info">
-                <span class="color-name">Secondary</span>
-                <span class="color-hex">#F4DCE4</span>
-              </div>
-            </div>
-            <div class="color-card">
-              <div class="swatch" style="background:#1d1a23"></div>
-              <div class="color-info">
-                <span class="color-name">Tertiary / Text</span>
-                <span class="color-hex">#1D1A23</span>
-              </div>
-            </div>
-            <div class="color-card">
-              <div class="swatch" style="background:#49454f"></div>
-              <div class="color-info">
-                <span class="color-name">Neutral</span>
-                <span class="color-hex">#49454F</span>
-              </div>
-            </div>
-            <div class="color-card">
-              <div class="swatch" style="background:#ffffff"></div>
-              <div class="color-info">
-                <span class="color-name">Background</span>
-                <span class="color-hex">#FFFFFF</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <span class="section-label">Typography</span>
-          </div>
-          <p>
-            Utilizing <strong>Roboto Flex</strong>, the typography system provides extreme adaptability
-            for variable font scaling, ensuring crisp legibility across dense scanned paragraphs and
-            high-level dashboard summaries.
-          </p>
-          <div class="typography-list">
-            <div class="type-row">
-              <strong>Headline LG</strong>
-              <span>32px / 600</span>
-            </div>
-            <div class="type-row">
-              <strong>Headline MD</strong>
-              <span>28px / 600</span>
-            </div>
-            <div class="type-row">
-              <strong>Headline SM</strong>
-              <span>24px / 500</span>
-            </div>
-            <div class="type-row">
-              <strong>Body MD</strong>
-              <span>14px / 400</span>
-            </div>
-            <div class="type-row">
-              <strong>Body SM</strong>
-              <span>12px / 400</span>
-            </div>
-            <div class="type-row">
-              <strong>Label MD</strong>
-              <span>12px / 500</span>
-            </div>
-          </div>
-          <div class="brand-note">
-            <h3>Scale Guidelines</h3>
-            <ul>
-              <li>Headlines use bolder weights (600) to anchor scanning modes and document titles.</li>
-              <li>Body text utilizes optimal tracking and generous line heights to minimize eye strain when reviewing transcribed notes.</li>
-              <li>Use <code>body-sm</code> exclusively for metadata such as scan timestamps and file sizes.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <span class="section-label">Layout &amp; Spacing</span>
-          </div>
-          <p>
-            The layout model relies on a responsive <strong>fluid mobile grid</strong> with standard 16px
-            screen margins, optimized for single-handed thumb reach on Android devices.
-          </p>
-          <div class="details">
-            <ul>
-              <li>Spacing is anchored to an 8px base grid, scaling upward via <code>space-md</code> (16px) and <code>space-lg</code> (24px) increments for content separation.</li>
-              <li>Bottom actions and Floating Action Buttons (FABs) maintain a strict 24px safe-area inset from system navigation bars.</li>
-            </ul>
-          </div>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <span class="section-label">Elevation &amp; Depth</span>
-          </div>
-          <p>
-            Depth is conveyed through <strong>tonal layers and ambient shadows</strong> that elevate
-            interactive surfaces above the pure white canvas.
-          </p>
-          <ul>
-            <li><strong>Surface Tiers:</strong> Use the soft pink secondary color (#FCE4EC) at low opacities or tonal shifts to differentiate resting cards from the background.</li>
-            <li><strong>Shadow Character:</strong> Shadows are extra-diffused, low-opacity, and tinted with subtle pink undertones (#D81B60 at 8-12% opacity) to unify the color narrative. Avoid harsh black drop shadows.</li>
-          </ul>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <span class="section-label">Shapes</span>
-          </div>
-          <p>
-            The design system embraces a friendly, tactile <strong>Rounded</strong> shape language (
-            <code>roundedleness: 2</code>).
-          </p>
-          <ul>
-            <li><strong>Standard Containers:</strong> UI elements feature generous radii (0.5rem to 1rem).</li>
-            <li><strong>Cards &amp; Sheets:</strong> Document preview cards and bottom sheets utilize pronounced curves (rounded-2xl to rounded-3xl / 1.5rem to 2rem) to emulate tactile paper cutouts ready for interaction.</li>
-          </ul>
-        </section>
-
-        <section class="section">
-          <div class="section-header">
-            <span class="section-label">Components</span>
-          </div>
-
-          <div class="component-grid">
-            <div class="component-card">
-              <h3>Buttons</h3>
-              <div class="button-demo">
-                <button class="btn primary">Filled / FAB</button>
-                <button class="btn secondary">Tonal / Outlined</button>
-              </div>
-            </div>
-
-            <div class="component-card">
-              <h3>Chips</h3>
-              <div class="chip-demo">
-                <span class="chip">TXT</span>
-                <span class="chip">PDF</span>
-                <span class="chip">Word</span>
-              </div>
-            </div>
-
-            <div class="component-card">
-              <h3>Lists &amp; Document Items</h3>
-              <div class="example-box">
-                <div class="meta">Thumbnail preview</div>
-                <div style="margin-top:8px; font-weight:600; color:var(--on-surface);">Transcribed snippet</div>
-                <div class="meta" style="margin-top:4px;">Timestamp metadata</div>
-              </div>
-            </div>
-
-            <div class="component-card">
-              <h3>Checkboxes &amp; Radio Buttons</h3>
-              <div class="example-box">
-                <label style="display:flex; align-items:center; gap:8px; color:var(--on-surface);">
-                  <input type="checkbox" checked /> Active selection
-                </label>
-              </div>
-            </div>
-
-            <div class="component-card">
-              <h3>Input Fields</h3>
-              <div class="example-box">
-                <div style="border:1px solid rgba(142,111,116,0.25); border-radius:12px; padding:10px 12px; color:var(--on-surface-variant);">
-                  Search or type text
-                </div>
-              </div>
-            </div>
-
-            <div class="component-card">
-              <h3>Cards</h3>
-              <div class="example-box">
-                <div style="font-weight:600; color:var(--on-surface);">Scan Card</div>
-                <div class="meta" style="margin-top:4px;">Thumbnail • title • word-count badge</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="brand-note" style="margin-top:20px;">
-            <h3>Specialized Components</h3>
-            <ul>
-              <li><strong>Camera Viewfinder Overlay:</strong> Reticle guides with corner accents in vibrant pink for aligning handwriting frames.</li>
-              <li><strong>OCR Text Comparison View:</strong> Split-surface layout showing the original scanned image alongside the editable transcribed text block.</li>
-            </ul>
-          </div>
-        </section>
-      </div>
-    </main>
-  </body>
+<nav class="bottom-nav" aria-label="Legal pages">
+  <button class="navbtn active" id="privacyBtn" onclick="showPage('privacy')">Privacy</button>
+  <button class="navbtn" id="termsBtn" onclick="showPage('terms')">Terms</button>
+</nav>
+</div>
+<script>
+const pages={privacy:{title:'Privacy Policy',el:document.getElementById('privacy')},terms:{title:'Terms & Conditions',el:document.getElementById('terms')}};
+function showPage(name, push=true){
+  Object.keys(pages).forEach(k=>pages[k].el.classList.toggle('hidden',k!==name));
+  document.getElementById('headerTitle').textContent=pages[name].title;
+  document.getElementById('privacyBtn').classList.toggle('active',name==='privacy');
+  document.getElementById('termsBtn').classList.toggle('active',name==='terms');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(push) history.pushState({page:name},'', '#'+name);
+}
+function goBack(){
+  if(history.length>1) history.back(); else showPage('privacy',false);
+}
+window.addEventListener('popstate',()=>{
+  const p=location.hash==='#terms'?'terms':'privacy'; showPage(p,false);
+});
+const initial=location.hash==='#terms'?'terms':'privacy'; showPage(initial,false);
+</script>
+</body>
 </html>
