@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InkText AI – Handwriting to Text</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --surface: #fef7ff;
+        --surface-dim: #dfd7e4;
+        --surface-bright: #fef7ff;
+        --surface-container-lowest: #ffffff;
+        --surface-container-low: #f8f1fe;
+        --surface-container: #f3ebf8;
+        --surface-container-high: #ede5f2;
+        --surface-container-highest: #e7e0ec;
+        --on-surface: #1d1a23;
+        --on-surface-variant: #5a4044;
+        --inverse-surface: #322f38;
+        --inverse-on-surface: #f6eefb;
+        --outline: #8e6f74;
+        --outline-variant: #e3bdc3;
+        --surface-tint: #bc004f;
+        --primary: #b0004a;
+        --on-primary: #ffffff;
+        --primary-container: #d81b60;
+        --on-primary-container: #fff2f3;
+        --inverse-primary: #ffb2bf;
+        --secondary: #6b5a60;
+        --on-secondary: #ffffff;
+        --secondary-container: #f4dce4;
+        --on-secondary-container: #716066;
+        --tertiary: #59575c;
+        --on-tertiary: #ffffff;
+        --tertiary-container: #726f74;
+        --on-tertiary-container: #f8f4f9;
+        --error: #ba1a1a;
+        --on-error: #ffffff;
+        --error-container: #ffdad6;
+        --on-error-container: #93000a;
+        --primary-fixed: #ffd9de;
+        --primary-fixed-dim: #ffb2bf;
+        --on-primary-fixed: #3f0016;
+        --on-primary-fixed-variant: #90003b;
+        --secondary-fixed: #f4dce4;
+        --secondary-fixed-dim: #d7c1c8;
+        --on-secondary-fixed: #25181e;
+        --on-secondary-fixed-variant: #524249;
+        --tertiary-fixed: #e5e1e7;
+        --tertiary-fixed-dim: #c9c5cb;
+        --on-tertiary-fixed: #1c1b1f;
+        --on-tertiary-fixed-variant: #48464a;
+        --background: #fef7ff;
+        --on-background: #1d1a23;
+        --surface-variant: #e7e0ec;
+
+        --headline-lg: 32px;
+        --headline-md: 28px;
+        --headline-sm: 24px;
+        --body-lg: 16px;
+        --body-md: 14px;
+        --body-sm: 12px;
+        --label-lg: 14px;
+        --label-md: 12px;
+        --label-sm: 11px;
+
+        --space-xxs: 4px;
+        --space-xs: 8px;
+        --space-sm: 12px;
+        --space-md: 16px;
+        --space-lg: 24px;
+        --space-xl: 32px;
+        --space-2xl: 48px;
+        --gutter: 16px;
+        --margin-screen: 16px;
+
+        --radius-sm: 0.25rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 1rem;
+        --radius-xl: 1.5rem;
+        --radius-full: 9999px;
+      }
+
+      * { box-sizing: border-box; }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Roboto Flex", sans-serif;
+        background: var(--background);
+        color: var(--on-background);
+        line-height: 1.5;
+      }
+
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px var(--margin-screen) 64px;
+      }
+
+      .page-shell {
+        background: var(--surface);
+        border-radius: 24px;
+        box-shadow: 0 14px 40px rgba(176, 0, 74, 0.08);
+        overflow: hidden;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, rgba(216, 27, 96, 0.08), rgba(244, 220, 228, 0.7));
+        border-bottom: 1px solid rgba(142, 111, 116, 0.2);
+        padding: 32px 24px 24px;
+      }
+
+      h1, h2, h3, h4, p, ul, li {
+        margin-top: 0;
+      }
+
+      h1 {
+        font-size: var(--headline-lg);
+        font-weight: 600;
+        line-height: 40px;
+        color: var(--on-surface);
+      }
+
+      h2 {
+        font-size: var(--headline-md);
+        font-weight: 600;
+        line-height: 36px;
+        color: var(--on-surface);
+      }
+
+      h3 {
+        font-size: var(--headline-sm);
+        font-weight: 500;
+        line-height: 32px;
+        color: var(--on-surface);
+      }
+
+      p, li {
+        font-size: var(--body-md);
+        line-height: 20px;
+        color: var(--on-surface-variant);
+      }
+
+      .section {
+        padding: 28px 24px;
+        border-bottom: 1px solid rgba(142, 111, 116, 0.15);
+      }
+
+      .section:last-child {
+        border-bottom: none;
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .section-label {
+        background: rgba(216, 27, 96, 0.1);
+        color: var(--primary-container);
+        border-radius: 12px;
+        padding: 6px 10px;
+        font-size: var(--label-md);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .brand-note {
+        background: var(--surface-container-low);
+        border-radius: var(--radius-xl);
+        padding: 16px;
+        margin-top: 16px;
+      }
+
+      .colors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .color-card {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        background: var(--surface-container-lowest);
+        border: 1px solid rgba(142, 111, 116, 0.15);
+      }
+
+      .swatch {
+        height: 72px;
+      }
+
+      .color-info {
+        padding: 12px;
+      }
+
+      .color-name {
+        display: block;
+        font-size: var(--label-lg);
+        font-weight: 600;
+        color: var(--on-surface);
+      }
+
+      .color-hex {
+        display: block;
+        margin-top: 4px;
+        font-size: var(--body-sm);
+        color: var(--on-surface-variant);
+      }
+
+      .typography-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .type-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        background: var(--surface-container-low);
+        border-radius: var(--radius-lg);
+        padding: 12px 14px;
+      }
+
+      .type-row strong {
+        color: var(--on-surface);
+      }
+
+      .details {
+        display: grid;
+        gap: 10px;
+      }
+
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pill {
+        background: var(--surface-container);
+        color: var(--on-surface);
+        padding: 7px 10px;
+        border-radius: 10px;
+        font-size: var(--label-md);
+        font-weight: 500;
+      }
+
+      ul {
+        margin-left: 18px;
+        padding-left: 10px;
+      }
+
+      li + li {
+        margin-top: 8px;
+      }
+
+      .component-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .component-card {
+        background: var(--surface-container-low);
+        border-radius: var(--radius-xl);
+        padding: 16px;
+        border: 1px solid rgba(142, 111, 116, 0.14);
+      }
+
+      .button-demo {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        border-radius: 999px;
+        padding: 10px 16px;
+        border: none;
+        font-weight: 600;
+        font-size: var(--label-lg);
+      }
+
+      .btn.primary {
+        background: var(--primary-container);
+        color: var(--on-primary-container);
+      }
+
+      .btn.secondary {
+        background: var(--secondary-container);
+        color: var(--on-secondary-container);
+      }
+
+      .chip-demo {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .chip {
+        background: var(--surface-container);
+        color: var(--on-surface);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: var(--label-md);
+      }
+
+      .example-box {
+        margin-top: 12px;
+        background: var(--surface-container-lowest);
+        border-radius: var(--radius-xl);
+        padding: 14px;
+        border: 1px solid rgba(142, 111, 116, 0.15);
+      }
+
+      .example-box .meta {
+        font-size: var(--body-sm);
+        color: var(--on-surface-variant);
+      }
+
+      @media (max-width: 640px) {
+        main {
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+
+        .hero,
+        .section {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="page-shell">
+        <header class="hero">
+          <h1>Brand &amp; Style</h1>
+          <p>
+            This design system is built upon a <strong>Corporate / Modern (Material 3)</strong>
+            aesthetic, tailored specifically for an Android productivity scanner application.
+            The emotional response is efficient, approachable, and delightful—transforming the
+            mechanical chore of digitization into a warm, tactile experience.
+          </p>
+        </header>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="section-label">Brand Personality</span>
+          </div>
+          <ul>
+            <li><strong>Precise:</strong> Laser-focused on accurate OCR and clean document management.</li>
+            <li><strong>Approachable:</strong> Welcoming pink hues soften the utilitarian nature of document scanning.</li>
+            <li><strong>Polished:</strong> High-end mobile ergonomics with fluid transitions and satisfying micro-interactions.</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="section-label">Colors</span>
+          </div>
+          <p>
+            The color palette leverages vibrant pinks against pristine whites and tinted surfaces to
+            create a high-contrast, accessible environment ideal for reading transcribed text.
+          </p>
+          <div class="colors-grid">
+            <div class="color-card">
+              <div class="swatch" style="background:#b0004a"></div>
+              <div class="color-info">
+                <span class="color-name">Primary</span>
+                <span class="color-hex">#B0004A</span>
+              </div>
+            </div>
+            <div class="color-card">
+              <div class="swatch" style="background:#f4dce4"></div>
+              <div class="color-info">
+                <span class="color-name">Secondary</span>
+                <span class="color-hex">#F4DCE4</span>
+              </div>
+            </div>
+            <div class="color-card">
+              <div class="swatch" style="background:#1d1a23"></div>
+              <div class="color-info">
+                <span class="color-name">Tertiary / Text</span>
+                <span class="color-hex">#1D1A23</span>
+              </div>
+            </div>
+            <div class="color-card">
+              <div class="swatch" style="background:#49454f"></div>
+              <div class="color-info">
+                <span class="color-name">Neutral</span>
+                <span class="color-hex">#49454F</span>
+              </div>
+            </div>
+            <div class="color-card">
+              <div class="swatch" style="background:#ffffff"></div>
+              <div class="color-info">
+                <span class="color-name">Background</span>
+                <span class="color-hex">#FFFFFF</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="section-label">Typography</span>
+          </div>
+          <p>
+            Utilizing <strong>Roboto Flex</strong>, the typography system provides extreme adaptability
+            for variable font scaling, ensuring crisp legibility across dense scanned paragraphs and
+            high-level dashboard summaries.
+          </p>
+          <div class="typography-list">
+            <div class="type-row">
+              <strong>Headline LG</strong>
+              <span>32px / 600</span>
+            </div>
+            <div class="type-row">
+              <strong>Headline MD</strong>
+              <span>28px / 600</span>
+            </div>
+            <div class="type-row">
+              <strong>Headline SM</strong>
+              <span>24px / 500</span>
+            </div>
+            <div class="type-row">
+              <strong>Body MD</strong>
+              <span>14px / 400</span>
+            </div>
+            <div class="type-row">
+              <strong>Body SM</strong>
+              <span>12px / 400</span>
+            </div>
+            <div class="type-row">
+              <strong>Label MD</strong>
+              <span>12px / 500</span>
+            </div>
+          </div>
+          <div class="brand-note">
+            <h3>Scale Guidelines</h3>
+            <ul>
+              <li>Headlines use bolder weights (600) to anchor scanning modes and document titles.</li>
+              <li>Body text utilizes optimal tracking and generous line heights to minimize eye strain when reviewing transcribed notes.</li>
+              <li>Use <code>body-sm</code> exclusively for metadata such as scan timestamps and file sizes.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="section-label">Layout &amp; Spacing</span>
+          </div>
+          <p>
+            The layout model relies on a responsive <strong>fluid mobile grid</strong> with standard 16px
+            screen margins, optimized for single-handed thumb reach on Android devices.
+          </p>
+          <div class="details">
+            <ul>
+              <li>Spacing is anchored to an 8px base grid, scaling upward via <code>space-md</code> (16px) and <code>space-lg</code> (24px) increments for content separation.</li>
+              <li>Bottom actions and Floating Action Buttons (FABs) maintain a strict 24px safe-area inset from system navigation bars.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="section-label">Elevation &amp; Depth</span>
+          </div>
+          <p>
+            Depth is conveyed through <strong>tonal layers and ambient shadows</strong> that elevate
+            interactive surfaces above the pure white canvas.
+          </p>
+          <ul>
+            <li><strong>Surface Tiers:</strong> Use the soft pink secondary color (#FCE4EC) at low opacities or tonal shifts to differentiate resting cards from the background.</li>
+            <li><strong>Shadow Character:</strong> Shadows are extra-diffused, low-opacity, and tinted with subtle pink undertones (#D81B60 at 8-12% opacity) to unify the color narrative. Avoid harsh black drop shadows.</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="section-label">Shapes</span>
+          </div>
+          <p>
+            The design system embraces a friendly, tactile <strong>Rounded</strong> shape language (
+            <code>roundedleness: 2</code>).
+          </p>
+          <ul>
+            <li><strong>Standard Containers:</strong> UI elements feature generous radii (0.5rem to 1rem).</li>
+            <li><strong>Cards &amp; Sheets:</strong> Document preview cards and bottom sheets utilize pronounced curves (rounded-2xl to rounded-3xl / 1.5rem to 2rem) to emulate tactile paper cutouts ready for interaction.</li>
+          </ul>
+        </section>
+
+        <section class="section">
+          <div class="section-header">
+            <span class="section-label">Components</span>
+          </div>
+
+          <div class="component-grid">
+            <div class="component-card">
+              <h3>Buttons</h3>
+              <div class="button-demo">
+                <button class="btn primary">Filled / FAB</button>
+                <button class="btn secondary">Tonal / Outlined</button>
+              </div>
+            </div>
+
+            <div class="component-card">
+              <h3>Chips</h3>
+              <div class="chip-demo">
+                <span class="chip">TXT</span>
+                <span class="chip">PDF</span>
+                <span class="chip">Word</span>
+              </div>
+            </div>
+
+            <div class="component-card">
+              <h3>Lists &amp; Document Items</h3>
+              <div class="example-box">
+                <div class="meta">Thumbnail preview</div>
+                <div style="margin-top:8px; font-weight:600; color:var(--on-surface);">Transcribed snippet</div>
+                <div class="meta" style="margin-top:4px;">Timestamp metadata</div>
+              </div>
+            </div>
+
+            <div class="component-card">
+              <h3>Checkboxes &amp; Radio Buttons</h3>
+              <div class="example-box">
+                <label style="display:flex; align-items:center; gap:8px; color:var(--on-surface);">
+                  <input type="checkbox" checked /> Active selection
+                </label>
+              </div>
+            </div>
+
+            <div class="component-card">
+              <h3>Input Fields</h3>
+              <div class="example-box">
+                <div style="border:1px solid rgba(142,111,116,0.25); border-radius:12px; padding:10px 12px; color:var(--on-surface-variant);">
+                  Search or type text
+                </div>
+              </div>
+            </div>
+
+            <div class="component-card">
+              <h3>Cards</h3>
+              <div class="example-box">
+                <div style="font-weight:600; color:var(--on-surface);">Scan Card</div>
+                <div class="meta" style="margin-top:4px;">Thumbnail • title • word-count badge</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="brand-note" style="margin-top:20px;">
+            <h3>Specialized Components</h3>
+            <ul>
+              <li><strong>Camera Viewfinder Overlay:</strong> Reticle guides with corner accents in vibrant pink for aligning handwriting frames.</li>
+              <li><strong>OCR Text Comparison View:</strong> Split-surface layout showing the original scanned image alongside the editable transcribed text block.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
